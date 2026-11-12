@@ -1,3 +1,4 @@
+// Modified by Amodal: explicit instance boot; host-owned persistence and history.
 // The editor core: its state, the engine client, and the commands it registers.
 //
 // Shaped after OpenCalc's `webapp/editor.core.js` at `b23c67c` (webapp/README.md):
@@ -25,7 +26,7 @@ import * as comments from "./editor.comments.js";
 import * as selpane from "./editor.selpane.js";
 import * as alttext from "./editor.alttext.js";
 import * as notes from "./editor.notes.js";
-import { initFiles, openFilePicker, download } from "./editor.files.js";
+import { openFilePicker, download } from "./editor.files.js";
 import * as slides from "./editor.slides.js";
 import * as selection from "./editor.selection.js";
 import * as text from "./editor.text.js";
@@ -41,8 +42,6 @@ import * as keys from "./editor.keys.js";
 import { initDialogs, aboutDialog, reportDialog, shortcutsDialog, errorDialog, showModal, closeModal } from "./editor.dialogs.js";
 import * as presence from "./editor.presence.js";
 import { registerFileCommands, initFile } from "./editor.file.js";
-import { initDrafts } from "./editor.drafts.js";
-import { initRecent, remember } from "./editor.recent.js";
 import * as views from "./editor.views.js";
 import * as arrange from "./editor.arrange.js";
 import * as find from "./editor.find.js";
@@ -446,11 +445,11 @@ function buildStatusBar() {
 
 /// What the desktop app's bridge calls (`desktop/src/main.rs`, `VS-03`): a file
 /// the operating system handed over opens through the same `openDeck`.
-globalThis.openpresentEditor = { openDeck, newDeck, runCommand: run };
+// The host uses the component API; no globals are published.
 
 /* ── Boot ───────────────────────────────────────────────────────────────── */
 
-async function boot() {
+export async function boot() {
   try {
     const t = localStorage.getItem("op.theme");
     if (t && t !== "auto") document.documentElement.dataset.theme = t;
@@ -472,19 +471,13 @@ async function boot() {
   insert.init();     // Insert > Symbol, WordArt, Link (`UX-006`)
   sections.init();   // Home > Section (`UX-006`)
   registerCommands();
-  presence.init();
+  // Amodal owns sharing; do not install the upstream collaboration service.
   initDialogs(request);
   slides.init();
   notes.init();      // the notes pane, editable (`UX-011`)
   text.init();
-  // A deck opened from this device is kept for File > Open's Recent list (`PAR-19`):
-  // copied first, as opening hands the bytes to the engine.
-  initFiles({ onOpen: async (name, bytes) => {
-    const kept = new Uint8Array(bytes.slice(0));
-    await openDeck(name, bytes);
-    if (state.deck?.name === name) remember(name, kept);
-  } });
-  initRecent(closeBackstage);
+  // Deck creation and import are owned by Amodal, not a second file picker.
+  // Amodal owns conversation/deck history.
   initFile();
   buildStatusBar();
   bindKeys();
@@ -501,10 +494,10 @@ async function boot() {
   // As PowerPoint: start on a new blank presentation, unless a file is already
   // arriving (the desktop shell's, or one dropped while the engine started).
   if (!state.deck && !opening) await newDeck();
-  presence.joinFromLink();
+  // Sharing is owned by the host; never join from the host page URL.
   // Autosave and the recovery bar (`SAVE-01`): after the first deck, so a draft from an
   // earlier session is offered beside it, never applied by itself.
-  initDrafts();
+  // Amodal owns persistence.
 }
 
-boot();
+
