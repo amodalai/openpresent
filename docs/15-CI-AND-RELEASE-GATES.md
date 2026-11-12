@@ -1,3 +1,4 @@
+<!-- Modified by Amodal: the npm-publish job and the npm-v* tag. -->
 # 15 — CI and release gates
 
 CI is part of the architecture. The jobs below are a **contract**: stable names, and a
@@ -55,6 +56,7 @@ reached its workflow and not its table.
 | `collab-browser` | `collab.yml` | On push to main, pull requests and on demand: builds the engine with wasm-pack and the collaboration server, starts the server on 127.0.0.1 serving `webapp/`, and drives two headless Chrome pages (`tests/browser/collab-two-pages.mjs`, `playwright-core` pinned): one shares, the other opens the link, both type into one title at once, one bolds it, the other undoes its own typing; both must save the same bytes and neither may raise a dialog. A second step, in the same job (`tests/browser/caret-on-other-slide-size.mjs`), opens a 10-inch 16:9 Google Slides deck after the blank one, clicks its title's drawn ink, and requires the caret inside that line | `COL-04`: co-editing in two browser pages; `UX-013`: the caret on a deck of another slide size |
 | `desktop-bundle` | `desktop.yml` | On Linux, macOS and Windows, on push to main, pull requests and on demand: builds `casual-slide-wasm` with `wasm-pack` (0.14.0) into `webapp/pkg`, then `cargo tauri build` of `desktop/` as `.deb`, `.app` and NSIS, and checks the bundle is on disk and not empty. On Linux also fmt, clippy `-D warnings` and tests of `desktop/`, the built binary run under xvfb with a fixture deck on its command line (`--self-check`, which passes only when the slide is drawn), and the `.deb`'s desktop entry checked to take a file. Copied from OpenCalc's `desktop` job at `5d42a07` | `VS-03`: the desktop app bundles on three OSs and draws as the web does |
 | `p1-evidence` | `phase1-exit.yml` | `phase1-evidence.py merge` of each job's record into `tools/phase1-evidence.json`, kept as the `phase1-evidence` artifact, then `tools/phase1-exit.py --quick --gates-result <p1-gates result> --sign-off-not-failing`: the gates item is met only when `p1-gates` succeeded, and owner sign-off, the owner's box, prints NOT MET without failing the job (`CI-22`); any other NOT MET fails it | The closing list, read from evidence made on GitHub |
+| `npm-publish` | `release-npm.yml` | Amodal's fork (FORK.md): builds `casual-slide-wasm` with `wasm-pack` (0.14.0), packs `@amodalai/openpresent` and checks the editor, engine, CJK manifest and notices are in it, then publishes to npm on an `npm-v*` tag or a manual run with `dry_run` false, from the `release` environment | The package carries the engine and the notices; the tag names the package's version |
 
 **Every job is read-only** (`permissions: contents: read`), **every action is pinned to a full
 commit SHA** with its tag in a comment, and a superseded pull-request run is cancelled while a
@@ -156,6 +158,7 @@ release workflows watching one tag namespace both fire on either tag:
 | `sdk-v*` | The browser SDK | reserved |
 | `desktop-v*` | The desktop app | reserved |
 | `server-v*` | The collaboration server | reserved |
+| `npm-v*` | `@amodalai/openpresent` on npm, Amodal's fork (FORK.md) | `release-npm.yml` |
 
 **A manual run is a dry run by default.** A release workflow that accepts `workflow_dispatch`
 has a `dry_run` input defaulting to `true`, which builds, packages and verifies everything and

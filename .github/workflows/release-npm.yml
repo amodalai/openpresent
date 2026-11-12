@@ -1,0 +1,64 @@
+# Amodal's fork: builds the engine, packs @amodalai/openpresent and publishes it to npm
+# (FORK.md). Fires on an `npm-v*` tag, which must match package.json's version. A manual
+# run is a dry run unless `dry_run` is set to false (docs/15 §Releases).
+name: release-npm
+
+on:
+  push:
+    tags: ['npm-v*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build and pack without publishing
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-npm
+  cancel-in-progress: false
+
+jobs:
+  npm-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: release
+    permissions:
+      contents: read
+      id-token: write # npm provenance
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: The tag names the package's version
+        if: github.event_name == 'push'
+        run: test "npm-v$(node --input-type=commonjs -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
+      # rust-toolchain.toml selects the toolchain and the wasm32 target.
+      - name: Build the engine to WebAssembly
+        run: |
+          set -euo pipefail
+          cargo install wasm-pack --version 0.14.0 --locked
+          wasm-pack build crates/casual-slide-wasm --release --target web --out-dir ../../webapp/pkg
+          # wasm-pack writes a `*` .gitignore, which npm honours, dropping the engine.
+          rm -f webapp/pkg/.gitignore
+          cp LICENSE NOTICE webapp/pkg/
+          git rev-parse HEAD > webapp/pkg/source-commit.txt
+          echo "engine sha256: $(sha256sum webapp/pkg/casual_slide_wasm_bg.wasm | cut -d' ' -f1)" >> "$GITHUB_STEP_SUMMARY"
+      - name: Pack and check the contents
+        run: |
+          set -euo pipefail
+          npm pack --dry-run --json > "$RUNNER_TEMP/pack.json"
+          node --input-type=commonjs -e '
+            const [{ files }] = require(process.argv[1]);
+            for (const want of ["webapp/editor.core.js", "webapp/pkg/casual_slide_wasm_bg.wasm", "webapp/fonts/cjk/manifest.json", "npm/index.mjs", "LICENSE", "NOTICE"])
+              if (!files.some((f) => f.path === want)) throw new Error(`the package is missing ${want}`);
+          ' "$RUNNER_TEMP/pack.json"
+      - name: Publish
+        if: github.event_name == 'push' || inputs.dry_run == false
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

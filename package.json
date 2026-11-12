@@ -1,0 +1,29 @@
+{
+  "name": "@amodalai/openpresent",
+  "version": "0.1.0",
+  "description": "The OpenPresent web editor and its compiled WebAssembly engine, prepared for embedding in a host application.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amodalai/openpresent.git"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./npm/index.d.mts",
+      "default": "./npm/index.mjs"
+    },
+    "./webapp/*": "./webapp/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "npm/",
+    "webapp/",
+    "NOTICE",
+    "crates/casual-slide-text/fonts/LICENSES/"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
