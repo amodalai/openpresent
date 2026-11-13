@@ -10,15 +10,16 @@ merging upstream.
 
 ## Changes from upstream
 
-The fork changes one upstream file, `webapp/editor.core.js`, in the commit "let the host
-boot the editor and own persistence". The file starts with a `Modified by Amodal` notice, as
-the Apache-2.0 licence requires.
+The fork changes `webapp/editor.core.js` so the host boots the editor and owns persistence,
+and `webapp/editor.text.js` so replacing selected text preserves destination formatting.
+Both files carry a `Modified by Amodal` notice.
 
 The fork adds these files, which upstream does not have:
 
 - `package.json` and `npm/`: the npm package and its entry point.
 - `.github/workflows/release-npm.yml`: builds the engine, packs the package, and publishes
   it on an `npm-v*` tag.
+- `tests/unit/`: focused editor and packed-package regressions.
 - `FORK.md`: this file.
 
 It also adds the `npm-publish` job and the `npm-v*` tag to the tables in
@@ -34,12 +35,19 @@ page is not a supported entry point of this fork.
 ## The package
 
 The package contains `webapp/` with the compiled engine in `webapp/pkg/`, the Apache-2.0
-`LICENSE` and `NOTICE`, and the licences of the fonts compiled into the engine. Its entry
+`LICENSE` and `NOTICE`, the licences of the fonts compiled into the engine, and the existing
+`schemas/` and production `tools/f4/` validation assets. Schemas retain their own third-party
+terms in `NOTICE` and `schemas/README.md`; the package does not relicense them. Its entry
 point exports the paths a host build needs:
 
 ```js
-import { webappDirectory, engineFile, noticeFiles, fontLicensesDirectory } from '@amodalai/openpresent';
+import { webappDirectory, engineFile, noticeFiles, fontLicensesDirectory, validationDirectory } from '@amodalai/openpresent';
 ```
+
+`validationDirectory` is the installed package root containing `schemas/` and
+`tools/f4/validate.py`. Hosts copy those assets and `noticeFiles` into their isolated
+execution environment. Validation requires Python 3 and `xmllint`; it performs no schema
+downloads. Validators are outside `webapp/` and are not browser assets.
 
 Modules are also importable by path, for example
 `@amodalai/openpresent/webapp/editor.core.js`, so a host bundler can compile the editor

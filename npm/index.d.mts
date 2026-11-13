@@ -6,3 +6,5 @@ export const engineFile: string;
 export const noticeFiles: string[];
 /** Licences of the fonts compiled into the engine. */
 export const fontLicensesDirectory: string;
+/** Root containing offline schemas/ and tools/f4/validate.py. Requires Python 3 and xmllint. */
+export const validationDirectory: string;

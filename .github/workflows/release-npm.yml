@@ -57,6 +57,10 @@ jobs:
             for (const want of ["webapp/editor.core.js", "webapp/pkg/casual_slide_wasm_bg.wasm", "webapp/fonts/cjk/manifest.json", "npm/index.mjs", "LICENSE", "NOTICE"])
               if (!files.some((f) => f.path === want)) throw new Error(`the package is missing ${want}`);
           ' "$RUNNER_TEMP/pack.json"
+      - name: Check packaged offline validation
+        run: |
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends libxml2-utils
+          node --test tests/unit/package-validation.test.mjs tests/unit/text-replacement.test.mjs
       - name: Publish
         if: github.event_name == 'push' || inputs.dry_run == false
         run: npm publish

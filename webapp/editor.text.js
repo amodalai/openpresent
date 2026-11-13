@@ -1,3 +1,4 @@
+// Modified by Amodal: selected-text replacement preserves destination formatting.
 // Text editing on the stage (`VS-05`): click into a text box, see a caret, type,
 // delete, select, Bold, Italic and Underline, undo and redo.
 //

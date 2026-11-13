@@ -72,6 +72,8 @@ by saying so.
 
 | 61 | 2026-11-13 | Amodal fork: fix paste formatting, verify in the embedded runtime UI, review and push the changes | `AMODAL-PASTE-01`, `webapp/editor.text.js` |
 
+| 62 | 2026-11-13 | Amodal fork: ship validators and schemas in our OpenPresent npm package so Cloud can remove its copied vendor folder | `AMODAL-PACKAGE-01`, `package.json`, `npm/` |
+
 ## Boundaries set by the environment
 
 | Date | What | Status |
