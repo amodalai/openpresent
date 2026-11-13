@@ -1,4 +1,3 @@
-/* Modified by Amodal: selectors target the editor instance, not the host page. */
 /* The editor's own stylesheet: the design tokens, then the page's regions.
  *
  * The token block is OpenCalc's (`webapp/editor.css` at `b23c67c`,
@@ -10,7 +9,7 @@
  * on the left, the slide on a grey stage, the notes pane under it, and the
  * status bar. Nothing here names a colour outside the token blocks. */
 
-.editor-root {
+:root {
   --op-background-color: #ffffff;
   --op-text-color: #1f1f1f;
   --op-icon-color: #5f6368;
@@ -48,7 +47,7 @@
   --op-accent-ring: color-mix(in srgb, var(--op-accent-color) 32%, transparent);
   --op-accent-soft: color-mix(in srgb, var(--op-accent-color) 18%, transparent);
 }
-.editor-root[data-theme="dark"] {
+:root[data-theme="dark"] {
   --op-background-color: #0f1216;
   --op-text-color: #e7ebf0;
   --op-icon-color: #b3bccb;
@@ -75,7 +74,7 @@
   --op-accent-soft: color-mix(in srgb, var(--op-accent-color) 18%, transparent);
 }
 @media (prefers-color-scheme: dark) {
-  .editor-root:not([data-theme="light"]) {
+  :root:not([data-theme="light"]) {
     --op-background-color: #0f1216;
     --op-text-color: #e7ebf0;
     --op-icon-color: #b3bccb;
@@ -105,7 +104,7 @@
 
 /* ── Page ───────────────────────────────────────────────────────────────── */
 
-.editor-root {
+body {
   margin: 0;
   font-size: 13px;
   line-height: 1.5;
@@ -115,7 +114,7 @@
   -webkit-font-smoothing: antialiased;
 }
 ::selection { background: var(--op-accent-soft); }
-.editor-body { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+.editor-body { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
@@ -263,8 +262,8 @@
 .notes-text.is-empty { color: var(--op-faint-text-color); }
 
 /* Without a deck the panes have nothing to show. */
-.editor-root:not(.op-has-deck) .slide-pane,
-.editor-root:not(.op-has-deck) .notes-pane { display: none; }
+html:not(.op-has-deck) .slide-pane,
+html:not(.op-has-deck) .notes-pane { display: none; }
 
 /* Reading View: the slide and the status bar, nothing else. */
 .op-reading .op-ribbon,
@@ -304,7 +303,7 @@
 .zoom-slider { width: 100px; height: 4px; margin: 0 4px; accent-color: var(--op-accent-color); cursor: pointer; }
 .zoom-slider:disabled { cursor: default; opacity: .5; }
 .zoom-slider:focus-visible { outline: 2px solid var(--op-accent-color); outline-offset: 4px; }
-@container (max-width: 720px) { .zoom-slider, #comments-toggle { display: none; } }
+@media (max-width: 720px) { .zoom-slider, #comments-toggle { display: none; } }
 
 /* ── Task pane: Format Shape (docs/53) ──────────────────────────────────── */
 
@@ -374,8 +373,8 @@
 .ap-kind { font-weight: 600; font-size: 12.5px; }
 .ap-name { color: var(--op-muted-text-color); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ap-start { flex: none; height: 24px; font: inherit; font-size: 12px; border: 1px solid var(--op-control-border-color); border-radius: 4px; background: var(--op-background-color); color: var(--op-text-color); }
-@container (max-width: 900px) { .task-pane { width: 240px; } }
-@container (max-width: 720px) {
+@media (max-width: 900px) { .task-pane { width: 240px; } }
+@media (max-width: 720px) {
   .bottom-status-more, .tb-status { display: none; }
   .slide-pane { width: 120px; }
   .thumb-frame { width: 84px; }
@@ -683,8 +682,8 @@ button.doc-name:focus-visible { outline: 2px solid var(--op-accent-color); outli
 .print-sheet { display: none; }
 @media print {
   @page { size: landscape; margin: 0; }
-  .editor-root.editor-body > *:not(.print-sheet) { display: none !important; }
-  .editor-root.editor-body { background: #fff; }
+  body.editor-body > *:not(.print-sheet) { display: none !important; }
+  body.editor-body { background: #fff; }
   .print-sheet { display: block; }
   .print-page { break-after: page; page-break-after: always; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; }
   .print-page:last-child { break-after: auto; page-break-after: auto; }

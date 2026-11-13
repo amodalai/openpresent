@@ -1,4 +1,3 @@
-/* Modified by Amodal: selectors target the editor instance, not the host page. */
 /* Copied from OpenCalc's `webapp/ribbon.tokens.css` at `b23c67c` (webapp/README.md),
  * with its `--oc-` names renamed `--op-` and the icon font removed: icons here are
  * the Fluent sprite, `icons.fluent.svg`. OpenCalc's notes follow.
@@ -50,7 +49,7 @@
  * Loaded before `ribbon.css` and `sheets.css`, which consume these names.
  */
 
-.editor-root, .editor-root {
+:root, :host {
   /* ---- Colour: aliases onto the published `--op-*` contract ------------- */
 
   /* Surfaces. `--bg` is the chrome strip (header, tab row, band); `--bg-2` the
@@ -88,7 +87,7 @@
 
   /* ---- Geometry: the measured contract, ported verbatim ----------------- */
 
-  /* Type scale. One scale for the whole chrome — a second .editor-root size for one
+  /* Type scale. One scale for the whole chrome — a second body size for one
    * surface is a fork, not a decision, which is why ONLYOFFICE's 11-12px is
    * not adopted (docs/123 §2.1). */
   --fs-body: 13px;
@@ -149,7 +148,7 @@
  * page, a chosen chip). White in both themes on the accent deepened a quarter
  * toward black: the dark theme's accent is a light blue meant for text, and
  * its paired text colour is near-black, which read as black on blue. */
-.editor-root, .editor-root {
+:root, :host {
   --rb-accent-fill: var(--op-accent-fill-color, color-mix(in srgb, var(--op-accent-color), #000 25%));
   --rb-on-accent: #fff;
 }
