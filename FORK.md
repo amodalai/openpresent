@@ -10,15 +10,9 @@ merging upstream.
 
 ## Changes from upstream
 
-Each change is one commit on `main`, and every modified upstream file starts with a
-`Modified by Amodal` notice, as the Apache-2.0 licence requires.
-
-| Commit subject | Files |
-| --- | --- |
-| let the host boot the editor and own persistence | `webapp/editor.core.js` |
-| scope the editor's styles to its root element | `webapp/editor.css`, `webapp/ribbon.css`, `webapp/ribbon.tokens.css` |
-| print slides from a dedicated window | `webapp/editor.file.js` |
-| read the presenter bridge from the presenter window | `webapp/presenter.js` |
+The fork changes one upstream file, `webapp/editor.core.js`, in the commit "let the host
+boot the editor and own persistence". The file starts with a `Modified by Amodal` notice, as
+the Apache-2.0 licence requires.
 
 The fork adds these files, which upstream does not have:
 
@@ -31,10 +25,11 @@ It also adds the `npm-publish` job and the `npm-v*` tag to the tables in
 `docs/15-CI-AND-RELEASE-GATES.md`, because upstream's `tools/check-workflows.py` fails on a
 job or release tag that the document does not list.
 
-With these changes the editor no longer boots itself. A host imports `boot` from
-`webapp/editor.core.js`, mounts the editor in an element with the `editor-root` class,
-installs `openpresentShow` on the Presenter View window it opens, and owns saving. The
-standalone `webapp/editor.html` page is not a supported entry point of this fork.
+With this change the editor no longer boots itself, publishes no global, and starts no
+drafts, recent-file list, file picker or collaboration session. A host gives the editor a
+page of its own, such as an iframe built from `webapp/editor.html`, calls `boot` from
+`webapp/editor.core.js` in that page, and owns saving. The standalone `webapp/editor.html`
+page is not a supported entry point of this fork.
 
 ## The package
 
@@ -62,7 +57,7 @@ git fetch upstream
 git merge upstream/main
 ```
 
-Resolve conflicts in the files listed above so each keeps its Amodal behaviour. Then bump
+Resolve conflicts in `webapp/editor.core.js` so it keeps its Amodal behaviour. Then bump
 the version and release.
 
 ## Releasing
