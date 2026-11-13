@@ -1,16 +1,15 @@
-// Modified by Amodal: per-instance presenter API.
 // Presenter View (`VS-07`): the second window of a slide show, as PowerPoint's.
 // The current slide, the next one, the speaker notes, a timer and the slide count.
 //
 // The editor's show (`editor.show.js`) owns everything. It calls `update(view)` here
 // each time the slide changes, and this window hands keys and buttons back through
-// the per-instance `window.openpresentShow`. No model and no engine here: the pictures are
+// `window.opener.openpresentShow`. No model and no engine here: the pictures are
 // `blob:` URLs the editor drew, and the notes, document text, are set with
 // `textContent` only.
 
 const byId = (id) => document.getElementById(id);
 const bridge = () => {
-  try { return window.openpresentShow || null; } catch { return null; }
+  try { return window.opener && !window.opener.closed ? window.opener.openpresentShow : null; } catch { return null; }
 };
 
 let started = Date.now();
