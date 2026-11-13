@@ -16,7 +16,10 @@ Both files carry a `Modified by Amodal` notice.
 
 The fork adds these files, which upstream does not have:
 
-- `package.json` and `npm/`: the npm package and its entry point.
+- `package.json`, `package-lock.json` and `npm/`: package exports, editor build, and the
+  Amodal embedding integration moved from `amodalai/cloud` at `8250161d9` (MIT;
+  copyright headers retained). `esbuild` (MIT) is a build-only dependency; `jsdom`
+  (MIT) supports the moved lifecycle tests. Neither is a runtime dependency.
 - `.github/workflows/release-npm.yml`: builds the engine, packs the package, and publishes
   it on an `npm-v*` tag.
 - `tests/unit/`: focused editor and packed-package regressions.
@@ -41,8 +44,22 @@ terms in `NOTICE` and `schemas/README.md`; the package does not relicense them. 
 point exports the paths a host build needs:
 
 ```js
-import { webappDirectory, engineFile, noticeFiles, fontLicensesDirectory, validationDirectory } from '@amodalai/openpresent';
+import { assetsDirectory, webappDirectory, engineFile, noticeFiles, fontLicensesDirectory, validationDirectory } from '@amodalai/openpresent';
 ```
+
+`assetsDirectory` contains the complete prebuilt embedded editor, including
+`editor-runtime.js` (exporting `mountEditor`), `amodal-editor.html`, workers, fonts,
+notices, and the same engine returned by `engineFile`. `amodal-build.json` records a
+content version and the engine SHA-256. Hosts copy these files and serve them from
+their own origin. No build dependencies or CDN are needed by consuming apps.
+The existing iframe lifecycle, autosave, edit barrier and host fetch contract are
+unchanged. React and backend packages must pin the same OpenPresent version.
+
+After building WASM, run `npm ci` and `npm run build:editor`; `npm pack` also builds
+the editor through `prepack`. Generated files are ignored by git and included in
+npm's explicit file list. The build integration sources and tests are not shipped.
+The upstream vanilla webapp remains unbundled; only the embedding entry points are
+bundled, preserving asset-relative worker/engine URLs. No engine code changes.
 
 `validationDirectory` is the installed package root containing `schemas/` and
 `tools/f4/validate.py`. Hosts copy those assets and `noticeFiles` into their isolated

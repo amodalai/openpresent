@@ -9,3 +9,6 @@ export const fontLicensesDirectory = at('../crates/casual-slide-text/fonts/LICEN
 
 // Root containing schemas/ and tools/f4/; consumed by isolated validation services.
 export const validationDirectory = at('..');
+
+// Complete prebuilt embedded editor; hosts copy these files without a bundler.
+export const assetsDirectory = webappDirectory;

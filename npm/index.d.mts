@@ -8,3 +8,6 @@ export const noticeFiles: string[];
 export const fontLicensesDirectory: string;
 /** Root containing offline schemas/ and tools/f4/validate.py. Requires Python 3 and xmllint. */
 export const validationDirectory: string;
+
+/** Complete prebuilt embedded editor, including its engine, fonts and notices. */
+export const assetsDirectory: string;

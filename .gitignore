@@ -17,3 +17,11 @@ node_modules/
 /server/*/target/
 /desktop/gen/
 /desktop/web-dist/
+
+# Generated embedded editor assets, packaged but never committed.
+/webapp/amodal-editor.*
+/webapp/editor-runtime.js
+/webapp/amodal-build.json
+/webapp/LICENSE
+/webapp/NOTICE
+/webapp/font-licenses/

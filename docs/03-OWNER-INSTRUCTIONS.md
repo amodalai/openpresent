@@ -79,3 +79,5 @@ by saying so.
 | Date | What | Status |
 | --- | --- | --- |
 | 2026-11-07 | Creating a GitHub remote and pushing was denied by the session's permission system | Resolved: the owner created the repo and pushed. Not worked around |
+
+| 63 | 2026-11-13 | Amodal fork: use package-owned ready-to-use editor assets for both OpenPresent and OpenDoc, regular React dependencies, matching runtime versions, and test both in the UI | `AMODAL-PACKAGE-02` |

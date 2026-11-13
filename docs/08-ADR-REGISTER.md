@@ -28,3 +28,9 @@ the WASM bundle; the fidelity contract; a new dependency in the engine.
 | ADR-017 | Rendering reference and fidelity method until `PV-01`: LibreOffice on GitHub's runner, labelled; PowerPoint PDF exports where the owner supplies them | Proposed, waits on `DEC-17` | [06](06-ROADMAP-AND-DELIVERY.md) §Phase 2 plan, [51](51-SPEC-CHECKLIST-AND-FIDELITY.md) |
 | ADR-019 | Render dependencies: tiny-skia, harfrust, skrifa, `image`, resvg; our own PDF writer and EMF reader. Each joins with its first consumer: `casual-slide-render` takes tiny-skia 0.11 (PNG) and `image` 0.25 with only its `jpeg` feature | Accepted, owner instruction 43 (`DEC-18` as recommended) | [06](06-ROADMAP-AND-DELIVERY.md) §Phase 2 plan, [19](19-WORKSPACE-SCAFFOLD-DESIGN.md) |
 | ADR-020 | Collaboration's seam and wire (`VS-09`): `casual-slide-transaction::collab` defines `Engine` (wire op, transform) and `Replica` (apply, snapshot) and holds OpenCalc's client and server sessions made generic over them; the server sees only `Engine` and never reads a deck. The engine takes `serde` and `serde_json` for the wire, as OpenCalc's transaction crate does. Stop and wait, one chunk in flight, since chained pipelining diverged (`COL-02`) | Accepted, owner instruction 42 (`VS-09` brief: copy OpenCalc's server behind a trait seam) | [24](24-OPERATIONS-AND-COLLABORATION.md), [19](19-WORKSPACE-SCAFFOLD-DESIGN.md) |
+
+## Amodal packaging
+
+| ADR | Decision | Status | Reasoning in |
+| --- | --- | --- | --- |
+| ADR-AMODAL-001 | The published package owns the complete embedded editor and exposes `assetsDirectory`. Host React wrappers copy prebuilt assets and do not compile the editor. Existing path exports remain available. | Accepted, owner instruction 63 | [FORK.md](../FORK.md), `AMODAL-PACKAGE-02`; follows the existing OpenDoc package approach, keeps engine and UI versions together, and avoids duplicate asset bundles in the React package. No engine or document-format changes. |

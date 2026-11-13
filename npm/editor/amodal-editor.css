@@ -1,0 +1,144 @@
+/* Amodal's shell; OpenPresent continues to own selection, text layout and commands. */
+/* Light mode keeps OpenPresent's palette. The dark palette repeats under both selectors
+   OpenPresent uses for its own dark tokens, so it applies in dark and in auto on a dark OS. */
+:root {
+  --amodal-button-color: var(--op-surface-color);
+  --amodal-button-hover-color: var(--op-border-color);
+  --amodal-button-text-color: var(--op-icon-color);
+  --amodal-save-state-color: var(--op-muted-text-color);
+  --amodal-slide-pane-color: var(--op-surface-color);
+}
+:root[data-theme="dark"] {
+  --op-background-color: #191919;
+  --op-stage-color: #191919;
+  --op-surface-color: #242424;
+  --op-text-color: #eeeeee;
+  --op-muted-text-color: #ababab;
+  --op-border-color: #343434;
+  --op-accent-color: #88d8c5;
+  --op-accent-fill-color: #34786d;
+  --op-control-border-color: #505050;
+  --op-popover-background-color: #272727;
+  --amodal-button-color: #2b2b2b;
+  --amodal-button-hover-color: #414141;
+  --amodal-button-text-color: #e4e4e4;
+  --amodal-save-state-color: #b3d4c9;
+  --amodal-slide-pane-color: #202020;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --op-background-color: #191919;
+    --op-stage-color: #191919;
+    --op-surface-color: #242424;
+    --op-text-color: #eeeeee;
+    --op-muted-text-color: #ababab;
+    --op-border-color: #343434;
+    --op-accent-color: #88d8c5;
+    --op-accent-fill-color: #34786d;
+    --op-control-border-color: #505050;
+    --op-popover-background-color: #272727;
+    --amodal-button-color: #2b2b2b;
+    --amodal-button-hover-color: #414141;
+    --amodal-button-text-color: #e4e4e4;
+    --amodal-save-state-color: #b3d4c9;
+    --amodal-slide-pane-color: #202020;
+  }
+}
+.app-header,
+.op-ribbon,
+.op-recovery {
+  display: none !important;
+}
+.amodal-more .op-ribbon {
+  display: flex !important;
+}
+.editor-body {
+  background: var(--op-background-color);
+  font-family: Inter, system-ui, sans-serif;
+}
+.amodal-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 12px;
+  background: var(--op-background-color);
+  flex: none;
+}
+.amodal-toolbar button {
+  border: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--amodal-button-color);
+  color: var(--amodal-button-text-color);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.amodal-toolbar button:hover {
+  background: var(--amodal-button-hover-color);
+}
+.amodal-toolbar button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.amodal-toolbar button:focus-visible {
+  outline: 2px solid var(--op-accent-color);
+  outline-offset: 2px;
+}
+.amodal-toolbar svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.amodal-save-state {
+  font-size: 12px;
+  padding: 4px 10px;
+  color: var(--amodal-save-state-color);
+  flex: 1;
+  min-width: 70px;
+}
+.amodal-editor-note {
+  color: var(--op-muted-text-color);
+  font-size: 11px;
+  padding: 0 16px 10px;
+  line-height: 1.5;
+}
+.workspace {
+  margin: 0;
+}
+.slide-pane {
+  background: var(--amodal-slide-pane-color);
+  width: 130px;
+}
+.stage {
+  background: var(--op-stage-color);
+}
+.notes-pane {
+  display: none;
+}
+
+/* Saving is handled by Amodal, so the upstream local-only claim does not apply. */
+.bottom-status {
+  display: none !important;
+}
+
+/* The editor responds to its panel width, not the full browser width. */
+.bottom-bar {
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 32px;
+  gap: 4px 10px;
+  padding: 5px 10px;
+}
+.bottom-bar > * {
+  flex-shrink: 0;
+}
+.bottom-bar .tb-status {
+  flex-shrink: 1;
+}

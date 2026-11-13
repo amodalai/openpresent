@@ -1,6 +1,6 @@
 {
   "name": "@amodalai/openpresent",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "The OpenPresent web editor and its compiled WebAssembly engine, prepared for embedding in a host application.",
   "license": "Apache-2.0",
   "repository": {
@@ -17,7 +17,7 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "npm/",
+    "npm/index.*",
     "webapp/",
     "NOTICE",
     "crates/casual-slide-text/fonts/LICENSES/",
@@ -30,5 +30,13 @@
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "scripts": {
+    "build:editor": "node npm/build-editor.mjs",
+    "prepack": "npm run build:editor"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.5",
+    "jsdom": "25.0.1"
   }
 }
