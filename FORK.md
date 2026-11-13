@@ -12,7 +12,9 @@ merging upstream.
 
 The fork changes `webapp/editor.core.js` so the host boots the editor and owns persistence,
 and `webapp/editor.text.js` so replacing selected text preserves destination formatting.
-Both files carry a `Modified by Amodal` notice.
+It also removes a duplicate history handler in `webapp/render.worker.js` so undo/redo
+always reports the slide count and refreshes thumbnails. All three files carry a
+`Modified by Amodal` notice.
 
 The fork adds these files, which upstream does not have:
 

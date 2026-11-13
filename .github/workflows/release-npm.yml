@@ -62,7 +62,7 @@ jobs:
       - name: Check packaged offline validation
         run: |
           sudo apt-get update && sudo apt-get install -y --no-install-recommends libxml2-utils
-          node --test tests/unit/package-validation.test.mjs tests/unit/text-replacement.test.mjs tests/unit/package-editor.test.mjs tests/unit/editor-lifecycle.test.mjs
+          node --test tests/unit/package-validation.test.mjs tests/unit/text-replacement.test.mjs tests/unit/package-editor.test.mjs tests/unit/editor-lifecycle.test.mjs tests/unit/slide-history.test.mjs
       - name: Publish
         if: github.event_name == 'push' || inputs.dry_run == false
         run: npm publish

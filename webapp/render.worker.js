@@ -1,3 +1,4 @@
+// Modified by Amodal: use one history handler that reports the current slide count.
 // The engine, off the page's thread. Started from OpenCalc's `webapp/file.worker.js`
 // (webapp/README.md): the page posts a deck's bytes here and the WebAssembly
 // engine reads them, so a large deck never freezes the window. Here the worker
@@ -300,10 +301,6 @@ self.onmessage = async (event) => {
       let value = fn(...(Array.isArray(msg.args) ? msg.args : []));
       if (ArrayBuffer.isView(value)) value = Array.from(value);
       self.postMessage({ id, ok: true, value, undo: Array.from(undo_state()) });
-    } else if (msg.op === "undo" || msg.op === "redo") {
-      const slide = msg.op === "undo" ? undo() : redo();
-      // -2: every slide changed, and perhaps the size with them (`VS-12`).
-      self.postMessage({ id, ok: true, slide, undo: Array.from(undo_state()), size: Array.from(slide_size()) });
     } else if (msg.op === "design") {
       const fn = Object.hasOwn(DESIGN, msg.fn) ? DESIGN[msg.fn] : null;
       if (!fn) throw new Error("unknown request");
