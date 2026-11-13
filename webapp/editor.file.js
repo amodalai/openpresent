@@ -1,4 +1,3 @@
-// Modified by Amodal: print a dedicated deck window, never the surrounding app.
 // The File tab's own verbs (`FILE-01`): rename in the title bar, File > Info's
 // properties and Advanced Properties, Save As, and Print.
 //
@@ -481,15 +480,9 @@ let printing = false;
 /// browser's own Print. Only the sheet prints (`@media print` in `editor.css`).
 async function print() {
   if (!state.deck || printing) return;
-  const printWindow = window.open('about:blank', '_blank', 'popup,width=1000,height=750');
-  if (!printWindow) { errorDialog('Allow pop-ups to print this presentation.'); return; }
   printing = true;
   changed();
-  const sheet = printWindow.document.createElement('div');
-  const style = printWindow.document.createElement('style');
-  style.textContent = '@page { size: landscape; margin: 0; } body { margin: 0; } .print-page { break-after: page; display: flex; align-items: center; justify-content: center; height: 100vh; } .print-page:last-child { break-after: auto; } img { max-width: 100%; max-height: 100%; object-fit: contain; }';
-  printWindow.document.head.append(style);
-  printWindow.document.body.append(sheet);
+  const sheet = byId("print-sheet");
   const urls = [];
   try {
     let hidden = [];
@@ -517,12 +510,9 @@ async function print() {
       for (const u of urls) URL.revokeObjectURL(u);
       status("Ready");
     };
-    printWindow.addEventListener('afterprint', () => { done(); printWindow.close(); }, { once: true });
-    printWindow.focus();
-    printWindow.print();
+    window.addEventListener("afterprint", done, { once: true });
+    window.print();
   } catch (e) {
-    printWindow.close();
-    for (const u of urls) URL.revokeObjectURL(u);
     status("Print failed");
     errorDialog("OpenPresent could not prepare the slides to print.", e.message);
   } finally {
