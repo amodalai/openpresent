@@ -473,10 +473,14 @@ async function insertNow(text, typing) {
   const [part, node] = obj();
   let [start, end] = textRange();
   if (start !== end) {
-    await call("text_delete", part, node, start, end);
-    typing = false;
+    // Capture the destination run before deletion. Separate delete/insert calls
+    // lose its explicit styling when the selection contains the entire run.
+    // Unspecified rich-paste properties inherit that run, in one undo step.
+    await call("edit_break_typing");
+    await call("text_paste_rich", part, node, start, end, [text], [-1, -1, -1, -1, -1], []);
+  } else {
+    await call("text_insert", part, node, start, text, typing);
   }
-  await call("text_insert", part, node, start, text, typing);
   // The caret moves past what was inserted; dropped control characters are
   // found by the length, which is the engine's.
   const length = await call("text_length", part, node);

@@ -70,6 +70,8 @@ by saying so.
 | 59 | 2026-11-09 | Approved target: PowerPoint parity from 9.9% toward 40% of the 352 features working. Re-audit what merged since `7539ea5` in the real editor first, then work the ranked `PAR` backlog in order, skipping rows another session owns; each row to its end point (undoable, saved valid, through the command registry, checked in a browser, engine tests seen to fail first), committed and counted in docs/96 as it lands | [96](96-POWERPOINT-FIT-GAP.md) §Parity today, `PAR-*` in [14](14-EXECUTION-TRACKER.md) |
 | 60 | 2026-11-09 | "Many features on the toolbar are disabled or not implemented, like transitions": audit every ribbon command (works, disabled, faked) with a tracker row per group still missing, leave none faked, and build in order Transitions, Animations, View, Insert, Home, each wired, undoable, saved valid and checked in a browser. Numbered after 59 on `main` | [53](53-POWERPOINT-WEB-SHELL-TARGET.md) "Command audit", `UX-006`, `RIB-01` to `RIB-11` |
 
+| 61 | 2026-11-13 | Amodal fork: fix paste formatting, verify in the embedded runtime UI, review and push the changes | `AMODAL-PASTE-01`, `webapp/editor.text.js` |
+
 ## Boundaries set by the environment
 
 | Date | What | Status |
