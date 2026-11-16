@@ -83,3 +83,5 @@ by saying so.
 | 63 | 2026-11-13 | Amodal fork: use package-owned ready-to-use editor assets for both OpenPresent and OpenDoc, regular React dependencies, matching runtime versions, and test both in the UI | `AMODAL-PACKAGE-02` |
 
 | 64 | 2026-11-13 | Fix the stale slide count and thumbnail list after undo, then verify add, undo, redo and saved reopening in the UI | `AMODAL-UNDO-01` |
+
+| 65 | 2026-11-16 | Fix the More tools ribbon in the embedded editor and ship it to Amodal | `AMODAL-RIBBON-01` |
