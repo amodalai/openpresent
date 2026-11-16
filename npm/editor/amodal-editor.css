@@ -44,13 +44,12 @@
     --amodal-slide-pane-color: #202020;
   }
 }
+/* More tools only stops hiding the ribbon: a display value set here would replace
+   OpenPresent's layout, which stacks the commands under the tabs. */
 .app-header,
-.op-ribbon,
-.op-recovery {
+.op-recovery,
+body:not(.amodal-more) .op-ribbon {
   display: none !important;
-}
-.amodal-more .op-ribbon {
-  display: flex !important;
 }
 .editor-body {
   background: var(--op-background-color);
