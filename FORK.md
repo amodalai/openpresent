@@ -10,8 +10,9 @@ merging upstream.
 
 ## Changes from upstream
 
-The fork changes `webapp/editor.core.js` so the host boots the editor and owns persistence,
-and `webapp/editor.text.js` so replacing selected text preserves destination formatting.
+The fork changes `webapp/editor.core.js` so the host boots the editor, opens its deck and
+owns persistence, and `webapp/editor.text.js` so replacing selected text preserves
+destination formatting.
 It also removes a duplicate history handler in `webapp/render.worker.js` so undo/redo
 always reports the slide count and refreshes thumbnails. All three files carry a
 `Modified by Amodal` notice.
@@ -32,9 +33,10 @@ It also adds the `npm-publish` job and the `npm-v*` tag to the tables in
 job or release tag that the document does not list.
 
 With this change the editor no longer boots itself, publishes no global, and starts no
-drafts, recent-file list, file picker or collaboration session. A host gives the editor a
-page of its own, such as an iframe built from `webapp/editor.html`, calls `boot` from
-`webapp/editor.core.js` in that page, and owns saving. The standalone `webapp/editor.html`
+blank presentation, drafts, recent-file list, file picker or collaboration session. A
+host gives the editor a page of its own, such as an iframe built from
+`webapp/editor.html`, calls `boot` from `webapp/editor.core.js` in that page, opens the
+deck, and owns saving. The standalone `webapp/editor.html`
 page is not a supported entry point of this fork.
 
 ## The package

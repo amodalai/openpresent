@@ -1,4 +1,4 @@
-// Modified by Amodal: explicit instance boot; host-owned persistence and history.
+// Modified by Amodal: explicit instance boot without a blank deck; host-owned persistence and history.
 // The editor core: its state, the engine client, and the commands it registers.
 //
 // Shaped after OpenCalc's `webapp/editor.core.js` at `b23c67c` (webapp/README.md):
@@ -491,9 +491,7 @@ export async function boot() {
   await startRibbon(byId("workspace"));
   changed();
   status("Ready");
-  // As PowerPoint: start on a new blank presentation, unless a file is already
-  // arriving (the desktop shell's, or one dropped while the engine started).
-  if (!state.deck && !opening) await newDeck();
+  // The host opens its own deck; a blank presentation here would show before it.
   // Sharing is owned by the host; never join from the host page URL.
   // Autosave and the recovery bar (`SAVE-01`): after the first deck, so a draft from an
   // earlier session is offered beside it, never applied by itself.

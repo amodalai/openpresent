@@ -48,7 +48,7 @@ const bundle = build({
 async function mountEditor(t, fetch, options = {}) {
   engine.edits = 0;
   const dom = new JSDOM(
-    '<div id="stage"></div><div id="notes-pane"></div><div class="bottom-bar"></div><div class="op-ribbon"></div>',
+    '<div id="stage"></div><div id="notes-pane"></div><div class="bottom-bar"></div><div class="op-ribbon"></div><div id="empty-state"><h1 class="empty-title"></h1></div>',
   );
   const oldDocument = globalThis.document,
     oldWindow = globalThis.window;

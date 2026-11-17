@@ -8,6 +8,8 @@ import { boot, openDeck, request, editsNow, state } from '../../webapp/editor.co
 import { command, run, register, registeredIds } from '../../webapp/commands.js';
 import { go } from '../../webapp/editor.slides.js';
 export async function mount(options) {
+  const emptyTitle = document.querySelector('#empty-state .empty-title');
+  emptyTitle.textContent = 'Opening presentation…';
   await boot();
   options.signal.throwIfAborted();
   const base = options.apiUrl;
@@ -230,14 +232,18 @@ export async function mount(options) {
         : saving
           ? 'Saving…'
           : agentBusy
-            ? `Agent is editing… · ${state.deck?.count ?? 0} slides · ${sequence} edits`
+            ? `Agent is editing…${loaded ? ` · ${state.deck?.count ?? 0} slides · ${sequence} edits` : ''}`
             : holds
               ? 'Preparing for the agent…'
-              : syncing
-                ? 'Updating slides…'
-                : dirty()
-                  ? 'Changes pending…'
-                  : `Saved · ${state.deck?.count ?? 0} slides`);
+              : !loaded
+                ? 'Opening…'
+                : syncing
+                  ? 'Updating slides…'
+                  : dirty()
+                    ? 'Changes pending…'
+                    : `Saved · ${state.deck?.count ?? 0} slides`);
+    // The placeholder is visible only until a deck opens, so a loaded editor still showing it was refused.
+    emptyTitle.textContent = loaded ? 'This presentation couldn’t be opened.' : 'Opening presentation…';
     note.textContent =
       agentBusy || holds
         ? 'The agent is editing. You can browse slides and download a copy. Editing unlocks when it finishes or stops.'
