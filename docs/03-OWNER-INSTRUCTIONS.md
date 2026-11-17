@@ -85,3 +85,5 @@ by saying so.
 | 64 | 2026-11-13 | Fix the stale slide count and thumbnail list after undo, then verify add, undo, redo and saved reopening in the UI | `AMODAL-UNDO-01` |
 
 | 65 | 2026-11-16 | Fix the More tools ribbon in the embedded editor and ship it to Amodal | `AMODAL-RIBBON-01` |
+
+| 66 | 2026-11-17 | Open the chat panel's deck without a blank presentation first, request its state and file together, and ship it to Amodal | `AMODAL-OPEN-01` |
