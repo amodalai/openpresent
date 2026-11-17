@@ -82,6 +82,21 @@ const snapshot = (revision = '1') =>
   new Response(JSON.stringify({ engineId: 'test', nativeRevision: revision, events: [{}], agentBusy: false }));
 const deck = (revision = '1') => new Response(new Uint8Array(), { headers: { 'X-Deck-Version': revision } });
 
+test('the first open requests the file without waiting for the state, so it costs one round trip', async (t) => {
+  const log = [];
+  const { newSlide } = await mountEditor(t, async (url) => {
+    if (String(url).endsWith('/download')) {
+      log.push('file');
+      return deck();
+    }
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    log.push('state');
+    return snapshot();
+  });
+  assert.deepEqual(log, ['file', 'state', 'state']);
+  assert.equal(newSlide.disabled, false);
+});
+
 test('chat preparation waits for an in-flight background refresh and retains the edit lock', async (t) => {
   let blockNext;
   const { editor, newSlide } = await mountEditor(t, async (url) => {
