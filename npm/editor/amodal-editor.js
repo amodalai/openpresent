@@ -283,6 +283,8 @@ export async function mount(options) {
 
   let pending = false;
   let refreshPromise;
+  // The first open requests the file alongside the state, so it waits one round trip instead of two.
+  let firstFile = deckFetch(`${base}/download`, { cache: 'no-store' }).catch(() => {});
   function refresh() {
     pending = true;
     if (refreshPromise) return refreshPromise;
@@ -297,6 +299,8 @@ export async function mount(options) {
       while (pending && !saving) {
         pending = false;
         const savesAtRequest = saves;
+        const early = firstFile;
+        firstFile = undefined;
         const response = await deckFetch(base, { cache: 'no-store' });
         if (!response.ok) throw new Error('Could not refresh the presentation. Reconnecting…');
         const snapshot = await response.json();
@@ -325,7 +329,10 @@ export async function mount(options) {
         }
         syncing = true;
         updateUI();
-        const file = await deckFetch(`${base}/download`, { cache: 'no-store' });
+        let file = await early;
+        // The server reads the two separately, so open the early file only if it is the revision this state names.
+        if (file?.headers.get('X-Deck-Version') !== nextVersion)
+          file = await deckFetch(`${base}/download`, { cache: 'no-store' });
         if (!file.ok) throw new Error('Could not refresh the slide content. Reconnecting…');
         const next = file.headers.get('X-Deck-Version');
         if (!next) throw new Error('The saved deck is missing its version.');
