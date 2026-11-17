@@ -122,6 +122,15 @@ body:not(.amodal-more) .op-ribbon {
   display: none;
 }
 
+/* Amodal opens the deck, so the empty slide area offers no file picker. */
+#empty-state .empty-text,
+#open-button {
+  display: none;
+}
+#empty-state .empty-title {
+  margin: 0;
+}
+
 /* Saving is handled by Amodal, so the upstream local-only claim does not apply. */
 .bottom-status {
   display: none !important;
