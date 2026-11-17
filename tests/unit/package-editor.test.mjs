@@ -37,5 +37,6 @@ test('a packed production install contains the complete editor with the same eng
   const page = await readFile(at('amodal-editor.html'), 'utf8');
   assert.ok(page.includes('src="./amodal-editor.js"'));
   assert.ok(!page.includes('src="./editor.js"'));
+  assert.ok(page.includes('<h1 class="empty-title">Opening presentation…</h1>'));
   assert.ok(!packed.files.some(({path: file}) => file.startsWith('npm/editor/') || file.includes('build-editor')));
 });

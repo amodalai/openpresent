@@ -9,7 +9,6 @@ import { command, run, register, registeredIds } from '../../webapp/commands.js'
 import { go } from '../../webapp/editor.slides.js';
 export async function mount(options) {
   const emptyTitle = document.querySelector('#empty-state .empty-title');
-  emptyTitle.textContent = 'Opening presentation…';
   await boot();
   options.signal.throwIfAborted();
   const base = options.apiUrl;

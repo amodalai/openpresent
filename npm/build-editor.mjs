@@ -31,8 +31,9 @@ await cp(fontLicensesDirectory, at('font-licenses'), { recursive: true });
 const page = (await readFile(at('editor.html'), 'utf8'))
   .replace(/<script type="module" src="\.\/editor\.js"><\/script>/,
     '<script type="module" src="./amodal-editor.js"></script>')
-  .replace(/<\/head>/, '  <link rel="stylesheet" href="./amodal-editor.css" />\n  </head>');
-if (!page.includes('src="./amodal-editor.js"') || !page.includes('href="./amodal-editor.css"'))
+  .replace(/<\/head>/, '  <link rel="stylesheet" href="./amodal-editor.css" />\n  </head>')
+  .replace('<h1 class="empty-title">Open a presentation</h1>', '<h1 class="empty-title">Opening presentation…</h1>');
+if (!['src="./amodal-editor.js"', 'href="./amodal-editor.css"', 'Opening presentation…</h1>'].every((s) => page.includes(s)))
   throw new Error('Upstream editor.html changed shape; update npm/build-editor.mjs.');
 await writeFile(at('amodal-editor.html'), page);
 async function filesIn(directory) {
